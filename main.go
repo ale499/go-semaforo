@@ -34,4 +34,6 @@ func main() {
 		time.Sleep(12 * time.Second) //Espera 12 segundos
 	}
 	fmt.Println("Funciono en la maquna virtual de Tadeo")
+
+	fmt.Println("Funciono en la maquina virtual de Lucas")
 }
