@@ -16,7 +16,7 @@ func main() {
 
 	fmt.Println("Funcionamiento basico de semaforos: ")
 
-	fmt.Print("Es una calle la cual es atrevesada por otra?")
+	fmt.Print("Es una calle atrevesada por otra?")
 
 	fmt.Scan(&n)
 
