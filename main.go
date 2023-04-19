@@ -33,5 +33,5 @@ func main() {
 		fmt.Println("Semaforo: Verde")
 		time.Sleep(12 * time.Second) //Espera 12 segundos
 	}
-
+	fmt.Println("Funciono en la maquna virtual de Tadeo")
 }
