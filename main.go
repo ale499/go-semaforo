@@ -20,6 +20,8 @@ func main() {
 
 	fmt.Scan(&n)
 
+	fmt.Println("Prueba linux lauti")
+
 	for {
 		// Estado: Rojo
 		fmt.Println("Semaforo: Rojo")
