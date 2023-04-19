@@ -22,6 +22,10 @@ func main() {
 
 	fmt.Println("Prueba linux lauti")
 
+	fmt.Println("Funciono en la maquna virtual de Tadeo")
+
+	fmt.Println("Funciono en la maquina virtual de Lucas")
+
 	for {
 		// Estado: Rojo
 		fmt.Println("Semaforo: Rojo")
@@ -35,7 +39,5 @@ func main() {
 		fmt.Println("Semaforo: Verde")
 		time.Sleep(12 * time.Second) //Espera 12 segundos
 	}
-	fmt.Println("Funciono en la maquna virtual de Tadeo")
 
-	fmt.Println("Funciono en la maquina virtual de Lucas")
 }
