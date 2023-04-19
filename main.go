@@ -1,27 +1,30 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 func main() {
-	fmt.Println("empezar")
-	fmt.Println("Primer cambiogus")
-	fmt.Println("PRIMERA LINEA DE COMANDO PARA HACER EL PROYECTO QUE NOS DIJO EL PROFESOR RODRIGUEZ :D")
+	fmt.Println("Comienzo:")
+	fmt.Println("PRIMERA LINEA DE COMANDO PARA HACER EL PROYECTO")
 
-	fmt.Println("Pruebas lauti ")
+	fmt.Println("Primera Prueba")
 
-	var b int
-	var a int
-	var c int
-	b = 4
+	fmt.Println("Funcionamiento basico de semaforos: ")
 
-	a = 5
+	for {
+		// Estado: Rojo
+		fmt.Println("Semaforo: Rojo")
+		time.Sleep(10 * time.Second) //Espera 10 segundos
 
-	c = a + b
+		// Estado: Amarillo
+		fmt.Println("Semaforo: Amarillo")
 
-	fmt.Println("La suma es ", c)
-
-	for i := 0; i < 10; i++ {
-		fmt.Println(i + 1)
+		// Estado: Verde
+		time.Sleep(2 * time.Second) //Espera 2 segundos
+		fmt.Println("Semaforo: Verde")
+		time.Sleep(12 * time.Second) //Espera 12 segundos
 	}
 
 }
