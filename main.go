@@ -25,6 +25,9 @@ func cambiarSemaforo(semaforo *Semaforo, wg *sync.WaitGroup, ch chan<- *Semaforo
 	}
 }
 
+// Esta funcion recibe y cambia los semaforos en el orden correcto.
+// Utiliza ch para recibir y enviar los semaforos.
+// Utilizamos las go routines tambien para llamar a la funcion cambiar semaforo
 func controladorSemaforos(semaforos []*Semaforo) {
 	ch := make(chan *Semaforo)
 
@@ -34,7 +37,7 @@ func controladorSemaforos(semaforos []*Semaforo) {
 	for _, semaforo := range semaforos {
 		go cambiarSemaforo(semaforo, &wg, ch)
 	}
-
+	//En esta go routine se recibe el semaforo actual de ch y encuenntra el siguiente semaforo en la lista.
 	go func() {
 		for {
 			semaforo := <-ch // Recibir semáforo actual del canal
@@ -68,9 +71,9 @@ func main() {
 
 	fmt.Println("Funcionamiento basico de semaforos: ")
 
-	fmt.Print("Es una calle atrevesada por otra?")
+	//fmt.Print("Es una calle atrevesada por otra?")
 
-	fmt.Scan(&n)
+	//fmt.Scan(&n)
 
 	//for {
 	// Estado: Rojo
@@ -95,6 +98,8 @@ func main() {
 	fmt.Println("Cambio de entorno a la maquina virtual de Lucas")
 
 	//Prueba preliminar semaforo (Prueba muuuuy simple)
+	//Creo 3 semaforos de cada color y con distinta duracion, lo almaceno en la lista
+	//semaforos y luego lo paso a la funcion controlador semaforos
 
 	semaforo1 := &Semaforo{color: "Rojo", duracion: 5 * time.Second}
 	semaforo2 := &Semaforo{color: "Amarillo", duracion: 2 * time.Second}
