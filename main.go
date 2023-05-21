@@ -62,7 +62,7 @@ func controladorSemaforos(semaforos []*Semaforo) {
 }
 func main() {
 
-	var n bool
+	//var n bool
 
 	fmt.Println("Comienzo:")
 	fmt.Println("PRIMERA LINEA DE COMANDO PARA HACER EL PROYECTO")
