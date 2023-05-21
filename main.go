@@ -11,7 +11,7 @@ type Semaforo struct {
 	duracion time.Duration
 }
 
-func cambiarSemaforo(semaforo *Semaforo, wg *sync.WaitGroup, ch chan<- *Semaforo) {
+func cambiarSemaforo(semaforo *Semaforo, wg *sync.WaitGroup, ch chan *Semaforo) {
 	defer wg.Done()
 
 	for {
@@ -22,6 +22,7 @@ func cambiarSemaforo(semaforo *Semaforo, wg *sync.WaitGroup, ch chan<- *Semaforo
 		time.Sleep(time.Second)
 
 		ch <- semaforo // Enviar semáforo actual al canal
+		<-ch           //Esperar para recibir el siguiente semaforo
 	}
 }
 
@@ -37,26 +38,6 @@ func controladorSemaforos(semaforos []*Semaforo) {
 	for _, semaforo := range semaforos {
 		go cambiarSemaforo(semaforo, &wg, ch)
 	}
-	//En esta go routine se recibe el semaforo actual de ch y encuenntra el siguiente semaforo en la lista.
-	go func() {
-		for {
-			semaforo := <-ch // Recibir semáforo actual del canal
-
-			// Encontrar el siguiente semáforo en la lista
-			var siguiente *Semaforo
-			for i, s := range semaforos {
-				if s == semaforo {
-					siguiente = semaforos[(i+1)%len(semaforos)]
-					break
-				}
-			}
-
-			time.Sleep(time.Second) // Esperar antes de cambiar el siguiente semáforo
-
-			fmt.Printf("Cambiando de %s a %s semaforo\n", semaforo.color, siguiente.color)
-			ch <- siguiente // Enviar el siguiente semáforo al canal
-		}
-	}()
 
 	wg.Wait()
 }
