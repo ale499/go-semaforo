@@ -2,9 +2,61 @@ package main
 
 import (
 	"fmt"
+	"sync"
 	"time"
 )
 
+type Semaforo struct {
+	color    string
+	duracion time.Duration
+}
+
+func cambiarSemaforo(semaforo *Semaforo, wg *sync.WaitGroup, ch chan<- *Semaforo) {
+	defer wg.Done()
+
+	for {
+		fmt.Printf("%s semaforo encendido\n", semaforo.color)
+		time.Sleep(semaforo.duracion)
+
+		fmt.Printf("%s semaforo apagado\n", semaforo.color)
+		time.Sleep(time.Second)
+
+		ch <- semaforo // Enviar semáforo actual al canal
+	}
+}
+
+func controladorSemaforos(semaforos []*Semaforo) {
+	ch := make(chan *Semaforo)
+
+	var wg sync.WaitGroup
+	wg.Add(len(semaforos))
+
+	for _, semaforo := range semaforos {
+		go cambiarSemaforo(semaforo, &wg, ch)
+	}
+
+	go func() {
+		for {
+			semaforo := <-ch // Recibir semáforo actual del canal
+
+			// Encontrar el siguiente semáforo en la lista
+			var siguiente *Semaforo
+			for i, s := range semaforos {
+				if s == semaforo {
+					siguiente = semaforos[(i+1)%len(semaforos)]
+					break
+				}
+			}
+
+			time.Sleep(time.Second) // Esperar antes de cambiar el siguiente semáforo
+
+			fmt.Printf("Cambiando de %s a %s semaforo\n", semaforo.color, siguiente.color)
+			ch <- siguiente // Enviar el siguiente semáforo al canal
+		}
+	}()
+
+	wg.Wait()
+}
 func main() {
 
 	var n bool
@@ -20,19 +72,19 @@ func main() {
 
 	fmt.Scan(&n)
 
-	for {
-		// Estado: Rojo
-		fmt.Println("Semaforo: Rojo")
-		time.Sleep(10 * time.Second) //Espera 10 segundos
+	//for {
+	// Estado: Rojo
+	//fmt.Println("Semaforo: Rojo")
+	//time.Sleep(10 * time.Second) //Espera 10 segundos
 
-		// Estado: Amarillo
-		fmt.Println("Semaforo: Amarillo")
+	// Estado: Amarillo
+	//fmt.Println("Semaforo: Amarillo")
 
-		// Estado: Verde
-		time.Sleep(2 * time.Second) //Espera 2 segundos
-		fmt.Println("Semaforo: Verde")
-		time.Sleep(12 * time.Second) //Espera 12 segundos
-	}
+	// Estado: Verde
+	//time.Sleep(2 * time.Second) //Espera 2 segundos
+	//fmt.Println("Semaforo: Verde")
+	//time.Sleep(12 * time.Second) //Espera 12 segundos
+	//}
 
 	fmt.Println("Cambio desde Windows a linux de Alejandro")
 
@@ -41,4 +93,14 @@ func main() {
 	fmt.Println("Funciono en la maquna virtual de Tadeo")
 
 	fmt.Println("Cambio de entorno a la maquina virtual de Lucas")
+
+	//Prueba preliminar semaforo (Prueba muuuuy simple)
+
+	semaforo1 := &Semaforo{color: "Rojo", duracion: 5 * time.Second}
+	semaforo2 := &Semaforo{color: "Amarillo", duracion: 2 * time.Second}
+	semaforo3 := &Semaforo{color: "Verde", duracion: 3 * time.Second}
+
+	semaforos := []*Semaforo{semaforo1, semaforo2, semaforo3}
+
+	controladorSemaforos(semaforos)
 }
