@@ -11,35 +11,39 @@ type Semaforo struct {
 	duracion time.Duration
 }
 
-func cambiarSemaforo(semaforo *Semaforo, wg *sync.WaitGroup, ch chan *Semaforo) {
-	defer wg.Done()
+func cambiarSemaforo(semaforo *Semaforo, ch chan<- *Semaforo) {
+	fmt.Printf("%s semaforo encendido\n", semaforo.color)
+	time.Sleep(semaforo.duracion)
 
-	for {
-		fmt.Printf("%s semaforo encendido\n", semaforo.color)
-		time.Sleep(semaforo.duracion)
+	fmt.Printf("%s semaforo apagado\n", semaforo.color)
+	time.Sleep(time.Second)
 
-		fmt.Printf("%s semaforo apagado\n", semaforo.color)
-		time.Sleep(time.Second)
-
-		ch <- semaforo // Enviar semáforo actual al canal
-		<-ch           //Esperar para recibir el siguiente semaforo
-	}
+	ch <- semaforo // Enviar semáforo actual al canal
 }
 
 // Esta funcion recibe y cambia los semaforos en el orden correcto.
 // Utiliza ch para recibir y enviar los semaforos.
 // Utilizamos las go routines tambien para llamar a la funcion cambiar semaforo
-func controladorSemaforos(semaforos []*Semaforo) {
-	ch := make(chan *Semaforo)
+func controladorSemaforos(semaforos []*Semaforo, ch <-chan *Semaforo, cambio <-chan struct{}) {
+	var siguiente *Semaforo
 
-	var wg sync.WaitGroup
-	wg.Add(len(semaforos))
+	for {
+		semaforo := <-ch // Recibir semáforo actual del canal
 
-	for _, semaforo := range semaforos {
-		go cambiarSemaforo(semaforo, &wg, ch)
+		// Encontrar el siguiente semáforo en la lista
+		for i, s := range semaforos {
+			if s == semaforo {
+				siguiente = semaforos[(i+1)%len(semaforos)]
+				break
+			}
+		}
+
+		time.Sleep(time.Second) // Esperar antes de cambiar al siguiente semáforo
+
+		fmt.Printf("Cambiando de %s a %s semaforo\n", semaforo.color, siguiente.color)
+
+		<-cambio // Esperar señal de la goroutine anónima
 	}
-
-	wg.Wait()
 }
 func main() {
 
@@ -88,5 +92,20 @@ func main() {
 
 	semaforos := []*Semaforo{semaforo1, semaforo2, semaforo3}
 
-	controladorSemaforos(semaforos)
+	ch := make(chan *Semaforo, 2)
+	cambio := make(chan struct{})
+
+	go controladorSemaforos(semaforos, ch, cambio)
+
+	var wg sync.WaitGroup
+	wg.Add(len(semaforos))
+
+	for _, semaforo := range semaforos {
+		go func(s *Semaforo) {
+			cambiarSemaforo(s, ch)
+			cambio <- struct{}{} //Señalar cambio de semaforo a la goroutine controladorSemaforos
+			wg.Done()
+		}(semaforo)
+	}
+	wg.Wait()
 }
