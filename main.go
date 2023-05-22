@@ -82,6 +82,20 @@ func main() {
 
 	fmt.Println("Cambio de entorno a la maquina virtual de Lucas")
 
+	/*primer intento de simulacion de calles*/
+
+	type Street struct {
+		name         string
+		interseccion int
+	}
+
+	street := Street{
+		name:         "Av. San martin",
+		interseccion: 5,
+	}
+	fmt.Println("Nombre de la calle: ", street.name)
+	fmt.Println("Numeros de intersecciones: ", street.interseccion)
+
 	//Prueba preliminar semaforo (Prueba muuuuy simple)
 	//Creo 3 semaforos de cada color y con distinta duracion, lo almaceno en la lista
 	//semaforos y luego lo paso a la funcion controlador semaforos
@@ -108,4 +122,5 @@ func main() {
 		}(semaforo)
 	}
 	wg.Wait()
+
 }
