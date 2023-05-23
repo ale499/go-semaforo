@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/TadeLauda/go-semaforo/controllers"
 	"github.com/TadeLauda/go-semaforo/initializers"
 	"github.com/gin-gonic/gin"
 )
@@ -12,10 +13,7 @@ func init() {
 
 func main() {
 	r := gin.Default()
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
+	r.GET("/",controllers.Postsemaforo)
 	})
 	r.Run() // listen and serve on 0.0.0.0:8080
 }

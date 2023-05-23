@@ -1,6 +1,10 @@
 package models
 
+import "gorm.io/gorm"
+
 type Semaforo struct {
-	Estado    string
+	gorm.Model
+	Estado string
+
 	Ubicacion string
 }
