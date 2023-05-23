@@ -13,7 +13,11 @@ func init() {
 
 func main() {
 	r := gin.Default()
-	r.GET("/",controllers.Postsemaforo)
-	})
-	r.Run() // listen and serve on 0.0.0.0:8080
+	r.POST("/crear", controllers.Postsemaforo)
+	r.GET("/getall", controllers.Getsemaforo)
+	r.GET("/traer/:id", controllers.Getidsemaforo)      //http://localhost:3000/traer/2//
+	r.PUT("/actualizar", controllers.Updatesemaforo)    //TODO: falta terminar este metodo aplicando paralelismo//
+	r.DELETE("/borrar/:id", controllers.Deletesemaforo) //http://localhost:3000/borrar/1//
+
+	r.Run()
 }
