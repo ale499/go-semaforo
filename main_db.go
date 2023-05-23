@@ -1,22 +1,16 @@
 package main
 
 import (
-	"fmt"
-	"log"
-
+	"github.com/TadeLauda/go-semaforo/initializers"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 )
 
 func init() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error cargando las variables de entorno")
-	}
+	initializers.Loadenv()
+	initializers.Conectdb()
 }
 
 func main() {
-	fmt.Println("Hola")
 	r := gin.Default()
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
