@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Postsemaforo(c gin.Context) {
+func Postsemaforo(c *gin.Context) {
 	//vamos a obtener los datos del body
 	var body struct {
 		Estado    string
@@ -32,9 +32,9 @@ func Postsemaforo(c gin.Context) {
 	})
 
 }
-func Getsemaforo(cgin.Context) {
-	//obtener semaforos en un slice
 
+func Getsemaforo(c *gin.Context) {
+	/* obtener semaforos en un slice*/
 	var semaforos []models.Semaforo
 	initializers.Db.Find(&semaforos)
 
@@ -43,7 +43,8 @@ func Getsemaforo(cgin.Context) {
 		"Todos los semaforos": semaforos,
 	})
 }
-func Getidsemaforo(cgin.Context) {
+
+func Getidsemaforo(c *gin.Context) {
 	//obtener id del semaforo//
 	id := c.Param("id")
 	// obtener el semaforo//
@@ -54,14 +55,16 @@ func Getidsemaforo(cgin.Context) {
 		"semaforo": semaforo,
 	})
 }
-func Updatesemaforo(c gin.Context) {
+
+func Updatesemaforo(c *gin.Context) {
 	// TODO: usar este metodo combinandolo con paralelismo para poder manejar el estado de los semaforos en tiempo real
 }
-func Deletesemaforo(cgin.Context) {
+func Deletesemaforo(c *gin.Context) {
 	//Obtener id del semaforo
 	id := c.Param("id")
 	//Borrar el semaforo
 	initializers.Db.Delete(&models.Semaforo{}, id)
 	//Responder
 	c.Status(200)
+
 }
