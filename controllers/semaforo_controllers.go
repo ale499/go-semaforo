@@ -32,7 +32,29 @@ func Postsemaforo(c *gin.Context) {
 	})
 
 }
-func Getsemaforo(c *gin.Context)    {}
-func Getidsemaforo(c *gin.Context)  {}
-func Updatesemaforo(c *gin.Context) {}
-func Deletesemaforo(c *gin.Context) {}
+func Getsemaforo(c *gin.Context) {
+	/* obtener semaforos en un slice*/
+	var semaforos []models.Semaforo
+	initializers.Db.Find(&semaforos)
+	// retornar semaforos //
+	c.JSON(200, gin.H{
+		"Todos los semaforos": semaforos,
+	})
+}
+func Getidsemaforo(c *gin.Context) {
+	//obtener id del semaforo//
+	id := c.Param("id")
+	// obtener el semaforo//
+	var semaforo models.Semaforo
+	initializers.Db.First(&semaforo, id)
+	//retornar semaforo//
+	c.JSON(200, gin.H{
+		"semaforo": semaforo,
+	})
+}
+func Updatesemaforo(c *gin.Context) {
+	// TODO: usar este metodo combinandolo con paralelismo para poder manejar el estado de los semaforos en tiempo real
+}
+func Deletesemaforo(c *gin.Context) {
+
+}

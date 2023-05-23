@@ -14,5 +14,9 @@ func init() {
 func main() {
 	r := gin.Default()
 	r.POST("/crear", controllers.Postsemaforo)
-	r.Run() // listen and serve on 0.0.0.0:8080
+	r.GET("/getall", controllers.Getsemaforo)
+	r.GET("/traer/:id", controllers.Getidsemaforo)
+	r.PUT("/actualizar", controllers.Updatesemaforo)
+	r.DELETE("/borrar", controllers.Deletesemaforo)
+	r.Run()
 }
