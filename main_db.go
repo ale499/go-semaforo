@@ -15,8 +15,8 @@ func main() {
 	r := gin.Default()
 	r.POST("/crear", controllers.Postsemaforo)
 	r.GET("/getall", controllers.Getsemaforo)
-	r.GET("/traer/:id", controllers.Getidsemaforo)
-	r.PUT("/actualizar", controllers.Updatesemaforo)
-	r.DELETE("/borrar", controllers.Deletesemaforo)
+	r.GET("/traer/:id", controllers.Getidsemaforo)       //http://localhost:3000/traer/2//
+	r.PUT("/actualizar/:id", controllers.Updatesemaforo) //TODO: falta terminar este metodo aplicando paralelismo//
+	r.DELETE("/borrar/:id", controllers.Deletesemaforo)  //http://localhost:3000/borrar/1//
 	r.Run()
 }
