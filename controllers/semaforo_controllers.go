@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/TadeLauda/go-semaforo/initializers"
+	"github.com/TadeLauda/go-semaforo/logic"
 	"github.com/TadeLauda/go-semaforo/models"
 	"github.com/gin-gonic/gin"
 )
@@ -53,6 +54,7 @@ func Getidsemaforo(c *gin.Context) {
 	})
 }
 func Updatesemaforo(c *gin.Context) {
+
 	//Obtenemos el id del semaforo a modificar
 	id := c.Param("id")
 	//Obtenemos los datos del semaforo
@@ -61,19 +63,22 @@ func Updatesemaforo(c *gin.Context) {
 		Ubicacion string
 	}
 	c.Bind(&body)
+
 	//Encontramos el semaforo que queremos actualizar
 	var semaforo models.Semaforo
 	initializers.Db.First(&semaforo, id)
+
+	newState := logic.ChangelogicState(semaforo.Estado)
 	//Lo actualizamos
 	initializers.Db.Model(&semaforo).Updates(models.Semaforo{
-		Estado:    body.Estado,
+		Estado:    newState,
 		Ubicacion: body.Ubicacion,
 	})
+
 	c.JSON(200, gin.H{
 		"Semaforo": semaforo,
 	})
 }
-
 func Deletesemaforo(c *gin.Context) {
 	//Obtener id del semaforo
 	id := c.Param("id")
