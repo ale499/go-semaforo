@@ -53,7 +53,6 @@ func Getidsemaforo(c *gin.Context) {
 	})
 }
 func Updatesemaforo(c *gin.Context) {
-	// TODO: usar este metodo combinandolo con paralelismo para poder manejar el estado de los semaforos en tiempo real
 	//Obtenemos el id del semaforo a modificar
 	id := c.Param("id")
 	//Obtenemos los datos del semaforo
