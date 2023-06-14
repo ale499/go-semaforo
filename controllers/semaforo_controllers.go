@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"time"
+
 	"github.com/TadeLauda/go-semaforo/initializers"
 	"github.com/TadeLauda/go-semaforo/logic"
 	"github.com/TadeLauda/go-semaforo/models"
@@ -43,6 +45,7 @@ func Getsemaforo(c *gin.Context) {
 	})
 }
 func Getidsemaforo(c *gin.Context) {
+	time.Sleep(10)
 	//obtener id del semaforo//
 	id := c.Param("id")
 	// obtener el semaforo//
@@ -52,6 +55,10 @@ func Getidsemaforo(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"semaforo": semaforo,
 	})
+	//Cada vez que se haga una peticion se ejecutara una GO ROUTINE en paralelo para determinar el cambio de los semaforos en función de su estado anterior.
+
+	go logic.ChangelogicState(semaforo.Estado)
+
 }
 func Updatesemaforo(c *gin.Context) {
 
